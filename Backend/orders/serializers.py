@@ -62,7 +62,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    children = RecursiveField(many=True)
+    child = RecursiveField(many=True)
 
     class Meta:
         model = Comment
