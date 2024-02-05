@@ -149,6 +149,7 @@ CSRF_TRUSTED_ORIGINS = []
 CORS_ALLOW_HEADERS = (
     "accept",
     "authorization",
+    "Authorization",
     "content-type",
     "user-agent",
     "x-csrftoken",
