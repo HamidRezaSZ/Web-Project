@@ -1,69 +1,60 @@
-from django.utils import timezone
-from rest_framework import serializers
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from cart.models import Cart
-from food.serializers import FoodSerializer
+from users.viewsets import ModelViewSet
 
-from .models import Comment, Discount, Order, OrderItem, OrderStatus
-
-
-class RecursiveField(serializers.Serializer):
-    def to_representation(self, value):
-        serializer = self.parent.parent.__class__(value, context=self.context)
-        return serializer.data
+from .models import Comment, Order, OrderStatus
+from .serializers import (CommentSerializer, CreateCommentSerializer,
+                          OrderSerializer, OrderStatusSerializer)
 
 
-class OrderStatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderStatus
-        fields = '__all__'
+class OrderStautsView(ModelViewSet):
+    permission_classes_by_action = {
+        "list": [IsAuthenticated],
+        "retrieve": [IsAuthenticated],
+        "create": [IsAdminUser],
+        "update": [IsAdminUser],
+        "partial_update": [IsAdminUser],
+        "destroy": [IsAdminUser],
+    }
+
+    serializer_class = OrderStatusSerializer
+    queryset = OrderStatus.objects.all()
 
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    food = FoodSerializer()
+class OrderView(ModelViewSet):
+    permission_classes_by_action = {
+        "list": [IsAuthenticated],
+        "retrieve": [IsAuthenticated],
+        "create": [IsAuthenticated],
+        "update": [IsAdminUser],
+        "partial_update": [IsAdminUser],
+        "destroy": [IsAdminUser],
+    }
 
-    class Meta:
-        model = OrderItem
-        fields = '__all__'
+    serializer_class = OrderSerializer
 
-
-class OrderSerializer(serializers.ModelSerializer):
-    status = OrderStatusSerializer()
-    items = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-    def get_items(self, obj):
-        return OrderItemSerializer(obj.orderitem_set.all(), many=True).data
-
-    def create(self, validated_data):
-        user = self.context.get('user')
-        validated_data['user'] = user
-
-        coupon = validated_data.get('coupon_code')
-        if coupon:
-            coupon_exist = Discount.objects.filter(
-                code=coupon, expire_at__gte=timezone.now())
-            if coupon_exist.exists():
-                coupon_obj = coupon_exist.first()
-                if coupon_obj.discount != 0:
-                    validated_data['discount_amount'] = coupon_obj.discount_amount
-                elif coupon_obj.percent != 0:
-                    cart_obj = Cart.objects.get_or_create(user=user)
-                    price = cart_obj.get_cart_price()
-                    validated_data['discount_amount'] = price * \
-                        (coupon_obj.discount_percent/100)
-            else:
-                raise serializers.ValidationError('Coupon code is wrong!')
-
-        return super().create(validated_data)
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    child = RecursiveField(many=True)
+class CommentView(ModelViewSet):
+    permission_classes_by_action = {
+        "list": [IsAuthenticated],
+        "retrieve": [IsAuthenticated],
+        "create": [IsAuthenticated],
+        "update": [IsAdminUser],
+        "partial_update": [IsAdminUser],
+        "destroy": [IsAdminUser],
+    }
+    queryset = Comment.objects.all()
 
-    class Meta:
-        model = Comment
-        fields = '__all__'
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateCommentSerializer
+
+        return CommentSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"user": self.request.user})
+        return context
