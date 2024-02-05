@@ -21,6 +21,4 @@ class FoodSerializer(ModelSerializer):
 
     def get_comments(self, obj):
         from orders.serializers import CommentSerializer
-        orders_id = OrderItem.objects.filter(
-            food=obj).distinct().values_list('order', flat=True)
-        return CommentSerializer(Comment.objects.filter(order__in=orders_id), many=True).data
+        return CommentSerializer(Comment.objects.filter(food=obj), many=True).data
