@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { baseUrl } from '../config';
 
 function Register() {
  const [username, setUsername] = useState("");
@@ -8,12 +9,17 @@ function Register() {
 
  const userState = useSelector(state => state.user);
 
- const handleLogin = (event) => {
+ const handleRegister = (event) => {
     event.preventDefault();
-    console.log(`Username: ${username}, Password: ${password}`);
-    // Add your login logic here
     if (!userState.isLoggedIn) {
-        setResult('registered');
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: 'React Hooks POST Request Example' })
+      };
+      fetch(`${baseUrl}/api/users/register/`, requestOptions)
+        .then(response => response.json())
+        .then(data => setPostId(data.id));
     } else {
         setResult('you are already logged in');
     }
@@ -33,7 +39,7 @@ function Register() {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleRegister}>
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
                         <input type="text" className="form-control" id="registerUsername" placeholder="Enter username" required onChange={e => setUsername(e.target.value)} />

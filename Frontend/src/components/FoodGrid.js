@@ -5,11 +5,11 @@ const Food = lazy(() => import('./Food'));
 
 function FoodGrid({foods}) {
     console.log(foods);
-    const foodCards = foods.map(({name, description, restaurant, price, id}, index) => {
+    const foodCards = foods.map(({name, description, price, id, comments}, index) => {
         return (
             <div className="col">
                 <Suspense fallback={<div>Loading food...</div>}>
-                    <Food key={index} name={name} description={description} restaurant={restaurant} price={price} id={id}/>
+                    <Food key={index} name={name} description={description} price={price} id={id} comments={comments}/>
                 </Suspense>
             </div>
         );

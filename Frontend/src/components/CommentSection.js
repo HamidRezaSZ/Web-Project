@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-function CommentSection() {
+function CommentSection({comments=[]}) {
+
     const [comment, setComment] = useState('')
 
-    const GetComments = () => {
-        // TODO get comments from API
-        return ([1, 2, 3, 4]);
-    }
-
     const Comments = () => {
-        const retrieved = GetComments();
-        const mapped = retrieved.map((cm) => {
+        console.log(comments);
+        const mapped = comments.map(({text}) => {
             return (
                 <li className="list-group-item">
-                    {cm}
+                    {text}
                 </li>
             );
         });
@@ -58,7 +54,7 @@ function CommentSection() {
                         <div className="container-fluid">
                             <form onSubmit={handleComment}>
                                 <div className="form-group">
-                                    <label htmlFor="commentText">Comment</label>
+                                    <label htmlFor="commentText">Write your opinion</label>
                                     <input type="text" className="form-control" id="commentText" placeholder="Enter your comment!" required onChange={e => setComment(e.target.value)}/>
                                 </div>
                                 <button type="submit" className="btn btn-primary">Submit</button>
