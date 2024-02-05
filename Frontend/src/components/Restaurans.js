@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Restaurants.css'
 import RestaurantItem from "./RestauranItem";
+import { baseUrl } from '../config';
 
 function Restuarants() {
     const [RestaurantContentDiv, SetRestaurantContentDiv] = useState('')
+    const [RestauranItems, SetRestauranItems] = useState('')
+
+    useEffect(() => {
+        fetch(`${baseUrl}/api/restaurant/restaurants/`)
+            .then(response => response.json())
+            .then(data => SetRestauranItems(data));
+    }, []);
 
     const GetRestuarants = () => {
-        // TODO  add API
+        console.log(RestauranItems);
         return (
             [1,2,2,3,3,40]
         );

@@ -38,8 +38,7 @@ function MainPage() {
     };
 
     const GetAllFoods = () => {
-        console.log(AllFoods);
-        return (<FoodGrid foods={[1, 2, 2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}/>);
+        return (<FoodGrid foods={AllFoods}/>);
     };
 
     return (

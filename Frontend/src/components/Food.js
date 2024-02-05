@@ -4,7 +4,7 @@ import { addFoodToCart } from "../UserState";
 
 const CommentSection = lazy(() => import('./CommentSection'));
 
-function Food({name='food', description='description', restaurant='restuarant', price='price'}){
+function Food({name='food', description='description', restaurant='restuarant', price='price', id='1'}){
 
   const userState = useSelector(state => state.user);
   const dispatch = useDispatch();

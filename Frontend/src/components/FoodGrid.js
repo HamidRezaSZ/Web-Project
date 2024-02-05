@@ -4,11 +4,11 @@ import React, { lazy, Suspense } from 'react';
 const Food = lazy(() => import('./Food'));
 
 function FoodGrid({foods}) {
-    const foodCards = foods.map((food, index) => {
+    const foodCards = foods.map(({name, description, restaurant, price, id}, index) => {
         return (
             <div className="col">
                 <Suspense fallback={<div>Loading food...</div>}>
-                    <Food key={index}/>
+                    <Food key={index} name={name} description={description} restaurant={restaurant} price={price} id={id}/>
                 </Suspense>
             </div>
         );
