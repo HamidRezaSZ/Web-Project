@@ -2,7 +2,7 @@ import React from "react";
 import Login from "./Login";
 import Register from './Register';
 import { useDispatch, useSelector } from "react-redux";
-import { toggleLoggedIn } from '../UserState';
+import { logout } from '../UserState';
 
 function NavBar({FoodsClicked=() => {}, RestaurantsClicked=() => {}, ShoppingCartClicked=() => {}, FoodsDisplay=true, RestaurantDisplay=true, ShoppingCartDisplay=true}) {
 
@@ -10,7 +10,7 @@ function NavBar({FoodsClicked=() => {}, RestaurantsClicked=() => {}, ShoppingCar
     const dispatch = useDispatch();
 
     const Logout = () => {
-        dispatch(toggleLoggedIn());
+        dispatch(logout());
     }
 
     return (

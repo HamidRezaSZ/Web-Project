@@ -10,27 +10,39 @@ function Register() {
  const userState = useSelector(state => state.user);
 
  const handleRegister = (event) => {
-    event.preventDefault();
-    if (!userState.isLoggedIn) {
+  event.preventDefault();
+  if (!userState.isLoggedIn) {
       const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          'username': username,
-          'password': password,
-          'confirm_password': password,
-          'first_name': 'first_name',
-          'last_mame': 'last_name',
-          'phone_number': 0,
-          'gender': 0,
-          'address': 'address'
-        })
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              'username': username,
+              'password': password,
+              'confirm_password': password,
+              'first_name': 'first_name',
+              'last_name': 'last_name',
+              'phone_number': '0',
+              'gender': '0',
+              'address': 'address'
+          })
       };
-      fetch(`${baseUrl}/api/users/register/`, requestOptions);
-    } else {
-        setResult('you are already logged in');
-    }
- };
+      fetch(`${baseUrl}/api/users/register/`, requestOptions)
+      .then(response => {
+        console.log(response);
+        if (!response.ok) {
+          setResult('Unable to Register.');
+        } else {
+          setResult('Registration was successfull');
+        }
+        return response.json();
+      })
+      .then(data => {console.log(data)})
+      .catch(error => console.error('Error:', error));
+  } else {
+      setResult('you are already logged in');
+  }
+};
+
 
  return (
     <>

@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { emptyFoodCart } from "../UserState";
+import { baseUrl } from '../config';
 
 function ShoppingCart() {
 
@@ -15,6 +16,25 @@ function ShoppingCart() {
         if (!userState.isLoggedIn) {
             alert('You must login first!');
         } else {
+            if (userState.isLoggedIn) {
+                userState.foodCart.map(({id}) => {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authoriztion': userState.accessToken},
+                    body: JSON.stringify({
+                        quantity: 1,
+                        food: id
+                    })
+                };
+                fetch(`${baseUrl}/api/cart/cart-item/`, requestOptions)
+                .then(response => response.json())
+                .then(data => {})
+                .catch(error => console.error('Error:', error));
+            });
+            alert('bought sucessfully');
+            } else {
+                alert('you should login first.');
+            }
             dispatch(emptyFoodCart());
         }
     }

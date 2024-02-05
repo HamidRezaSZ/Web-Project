@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleLoggedIn } from '../UserState';
+import { login } from '../UserState';
+import { baseUrl } from '../config';
 
 function Login() {
 
@@ -14,18 +15,37 @@ function Login() {
  const dispatch = useDispatch();
 
  const handleLogin = (event) => {
-    console.log(`Username: ${username}, Password: ${password}`);
-    // Add your login logic here
-    if (!userState.isLoggedIn) {
-        setResult('logged in');
-        dispatch(toggleLoggedIn());
-        if (closeButtonRef.current) {
-          closeButtonRef.current.click();
-       }
-    } else {
-        setResult('you are already logged in');
-    }
- };
+  event.preventDefault();
+  if (!userState.isLoggedIn) {
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              'username': username,
+              'password': password
+          })
+      };
+      fetch(`${baseUrl}/api/users/login/`, requestOptions)
+          .then(response => {
+              if (!response.ok) {
+                setResult('Unable to login');
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(data => {
+              console.log(data);
+              dispatch(login(data))
+              if (closeButtonRef.current) {
+                closeButtonRef.current.click();
+            }
+          })
+          .catch(error => console.error('Error:', error));
+  } else {
+      setResult('you are already logged in');
+  }
+};
+
 
  return (
     <>
