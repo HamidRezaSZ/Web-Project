@@ -15,11 +15,18 @@ function Register() {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: 'React Hooks POST Request Example' })
+        body: JSON.stringify({
+          'username': username,
+          'password': password,
+          'confirm_password': password,
+          'first_name': 'first_name',
+          'last_mame': 'last_name',
+          'phone_number': 0,
+          'gender': 0,
+          'address': 'address'
+        })
       };
-      fetch(`${baseUrl}/api/users/register/`, requestOptions)
-        .then(response => response.json())
-        .then(data => setPostId(data.id));
+      fetch(`${baseUrl}/api/users/register/`, requestOptions);
     } else {
         setResult('you are already logged in');
     }
