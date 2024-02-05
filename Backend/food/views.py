@@ -1,4 +1,4 @@
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from users.viewsets import ModelViewSet
 
@@ -8,8 +8,8 @@ from .serializers import *
 
 class FoodCategoryView(ModelViewSet):
     permission_classes_by_action = {
-        "list": [IsAuthenticated],
-        "retrieve": [IsAuthenticated],
+        "list": [AllowAny],
+        "retrieve": [AllowAny],
         "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
@@ -22,8 +22,8 @@ class FoodCategoryView(ModelViewSet):
 
 class FoodView(ModelViewSet):
     permission_classes_by_action = {
-        "list": [IsAuthenticated],
-        "retrieve": [IsAuthenticated],
+        "list": [AllowAny],
+        "retrieve": [AllowAny],
         "create": [IsAdminUser],
         "update": [IsAdminUser],
         "partial_update": [IsAdminUser],
