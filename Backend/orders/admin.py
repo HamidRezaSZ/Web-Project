@@ -14,11 +14,6 @@ class OrderItemInline(admin.TabularInline):
     extra = 0
 
 
-class CommentInline(admin.TabularInline):
-    model = Comment
-    extra = 0
-
-
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('user', 'total_price',
@@ -26,7 +21,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('user', 'total_price',
                     'discount_amount', 'status', 'created_at')
     list_filter = ('user', 'status', 'created_at')
-    inlines = (OrderItemInline, CommentInline)
+    inlines = (OrderItemInline,)
 
 
 @admin.register(Comment)
