@@ -4,27 +4,19 @@ import RestaurantItem from "./RestauranItem";
 import { baseUrl } from '../config';
 
 function Restuarants() {
-    const [RestaurantContentDiv, SetRestaurantContentDiv] = useState('')
-    const [RestauranItems, SetRestauranItems] = useState('')
+    const [RestaurantContentDiv, SetRestaurantContentDiv] = useState('');
+    const [RestauranItems, SetRestauranItems] = useState([]);
 
     useEffect(() => {
         fetch(`${baseUrl}/api/restaurant/restaurants/`)
             .then(response => response.json())
-            .then(data => SetRestauranItems(data));
+            .then(data => {SetRestauranItems(data);console.log(data)}).catch(error => console.error('Error:', error));
+            
     }, []);
 
-    const GetRestuarants = () => {
-        console.log(RestauranItems);
-        return (
-            [1,2,2,3,3,40]
-        );
-    }
-
-    const RestuaransList = GetRestuarants();
-
-    const RestaurantItems = RestuaransList.map(
-        (restaurant) => {
-            return (<RestaurantItem name={restaurant} onclickFunc={SetRestaurantContentDiv}/>);
+    const RestuaransList = RestauranItems.map(
+        ({name, id}) => {
+            return (<RestaurantItem name={name} id={id} onclickFunc={SetRestaurantContentDiv}/>);
         }
     )
 
@@ -32,8 +24,8 @@ function Restuarants() {
         <>
         <div className="restaurancontainer">
             <div className="left">
-            <   ul className="list-group">
-                    {RestaurantItems}
+                <ul className="list-group">
+                    {RestuaransList}
                 </ul>
             </div>
             <div class="right">{RestaurantContentDiv}</div>

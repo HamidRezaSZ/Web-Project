@@ -4,6 +4,7 @@ import React, { lazy, Suspense } from 'react';
 const Food = lazy(() => import('./Food'));
 
 function FoodGrid({foods}) {
+    console.log(foods);
     const foodCards = foods.map(({name, description, restaurant, price, id}, index) => {
         return (
             <div className="col">

@@ -1,14 +1,23 @@
 // RestaurantItem.js
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
+import { baseUrl } from '../config';
 
 const FoodGrid = lazy(() => import('./FoodGrid'));
 
-function RestaurantItem({name='Restuarnt Item', onclickFunc=(props) => {}}) {
+function RestaurantItem({name='Restuarnt Item', id='-1', onclickFunc=(props) => {}}) {
+    const [foodItems, SetfoodItems] = useState([]);
+
+    useEffect(() => {
+        fetch(`${baseUrl}/api/restaurant/restaurants/${id}`)
+            .then(response => response.json())
+            .then(data => {SetfoodItems(data.foods);console.log(data)}).catch(error => console.error('Error:', error));
+            
+    }, []);
 
     const GetRestaurantFoods = () => {
         return (
             <Suspense fallback={<div>Loading foods...</div>}>
-                <FoodGrid foods={[1, 2, 2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}/>
+                <FoodGrid foods={foodItems}/>
             </Suspense>
         );
     }
