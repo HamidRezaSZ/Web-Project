@@ -29,8 +29,8 @@ class Order(models.Model):
         return f'{self.user} - {self.total_price} - {self.status}'
 
     def save(self, *args, **kwargs) -> None:
-        cart_obj = Cart.objects.get_or_create(user=self.user)
-        self.total_price, created = cart_obj.get_cart_price()
+        cart_obj, created = Cart.objects.get_or_create(user=self.user)
+        self.total_price = cart_obj.get_cart_price()
         super().save()
         for item in cart_obj.cartitem_set.all():
             OrderItem.objects.create(
