@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "./NavBar";
 import FoodGrid from "./FoodGrid";
 import Restuarants from "./Restaurans";
 import ShoppingCart from "./ShoppingCart";
+import { baseUrl } from '../config';
 
 function MainPage() {
     const [FoodsDisplay, SetFoodsDisplay] = useState(false);
     const [RestaurantDisplay, SetRestaurantDisplay] = useState(false);
     const [ShoppingCartDisplay, SetShoppingCartDisplay] = useState(false);
     const [Content, SetContent] = useState('');
+    const [AllFoods, SetAllFoods] = useState('');
 
+    useEffect(() => {
+        fetch(`${baseUrl}/food/foods/`)
+            .then(response => response.json())
+            .then(data => SetAllFoods(data));
+    }, []);
 
     const RestaurantsClicked = () => {
         SetFoodsDisplay(false);
@@ -31,7 +38,7 @@ function MainPage() {
     };
 
     const GetAllFoods = () => {
-        //TODO must get foods from backend API
+        console.log(AllFoods);
         return (<FoodGrid foods={[1, 2, 2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}/>);
     };
 
