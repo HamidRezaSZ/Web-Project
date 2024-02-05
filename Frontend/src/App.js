@@ -21,7 +21,7 @@ function App() {
   //     </header>
   //   </div>
   // );
-  return <div className='App'><MainPage /></div>;
+  return (<div className='App'><MainPage /></div>);
 }
 
 export default App;

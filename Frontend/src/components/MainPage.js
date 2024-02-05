@@ -13,7 +13,7 @@ function MainPage() {
     const [AllFoods, SetAllFoods] = useState('');
 
     useEffect(() => {
-        fetch(`${baseUrl}/food/foods/`)
+        fetch(`${baseUrl}/api/foods/foods/`)
             .then(response => response.json())
             .then(data => SetAllFoods(data));
     }, []);
