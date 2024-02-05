@@ -17,6 +17,19 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'first_name', 'last_name', 'phone_number',
                   'gender', 'password', 'confirm_password', 'birth_date', 'birth_date', 'address')
 
+    def validate(self, attrs):
+        if attrs['password'] != attrs['confirm_password']:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."})
+
+        return super().validate(attrs)
+
+    def create(self, validated_data):
+        validated_data.pop('confirm_password')
+        user = User.objects.create_user(**validated_data)
+
+        return user
+
 
 class ProfileSerializer(ModelSerializer):
     class Meta:
