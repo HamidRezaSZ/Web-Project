@@ -60,15 +60,15 @@ class Comment(models.Model):
         'self', on_delete=models.CASCADE, verbose_name='پاسخ', null=True, blank=True, related_name='child')
     user = models.ForeignKey(
         'users.User', on_delete=models.CASCADE, verbose_name='کاربر')
-    order = models.ForeignKey(
-        'Order', on_delete=models.CASCADE, verbose_name='سفارش', null=True, blank=True)
+    food = models.ForeignKey(
+        'food.Food', on_delete=models.CASCADE, verbose_name='غذا', null=True, blank=True)
     text = models.TextField(verbose_name='متن')
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name='تاریخ سفارش')
     score = models.IntegerField(verbose_name='امتیاز', null=True, blank=True)
 
     def __str__(self):
-        return f'{self.user} - {self.order} - {self.text}'
+        return f'{self.user} - {self.food} - {self.text}'
 
 
 class Discount(models.Model):
